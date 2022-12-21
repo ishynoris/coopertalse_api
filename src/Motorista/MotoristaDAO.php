@@ -12,6 +12,20 @@ class MotoristaDAO {
 		$this->oConnection = $oConnection;
 	}
 
+	public function findByFilters(MotoristaFilters $oFiltros): MotoristaList {
+		$sSql = "SELECT mta.* FROM mta_motorsta WHERE 1=1";
+		$aParams = [];
+
+		$sHashDispositivo = $oFiltros->getHashDispositivo();
+		if (!empty($sHashDispositivo)) {
+			$sSql .= " AND mta.mta_device_hash = ?";
+			$aParams[] = $sHashDispositivo;
+		}
+
+		$aaMotorista = $this->oConnection->select($sSql, $aParams);
+		return MotoristaList::createFromArray($aaMotorista);
+	}
+
 	public function save(Motorista $oMotorista) {
 		$sSql = "INSERT INTO mta_motorista (mta_device_hash, mta_nome, cro_id) 
 				 VALUES (?, ?, ?)";
