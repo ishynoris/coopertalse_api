@@ -11,7 +11,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 class Motorista extends AbstractModel {
 
-	private int $iId;
+	private int $iId = 0;
 	private string $sDeviceHash;
 	private string $sNome;
 	private ChavePixList $loChavePix;
@@ -77,6 +77,10 @@ class Motorista extends AbstractModel {
 		return $this->sNome;
 	}
 
+	public function getNumeroCarro(): string {
+		return $this->oCarro->getNumero();
+	}
+
 	public function getCarroId(): int {
 		return $this->oCarro->getId();
 	}
@@ -89,5 +93,16 @@ class Motorista extends AbstractModel {
 		foreach ($this->loChavePix as $oChavePix) {
 			$oChavePix->cadastrar();
 		}
+	}
+
+	public function copyFrom(Motorista $oMotorista) {
+		$this->iId = $oMotorista->iId > 0 ? $oMotorista->iId : $this->iId;
+		$this->sDeviceHash = $oMotorista->sDeviceHash ?? $this->sDeviceHash;
+		$this->sNome = $oMotorista->sNome ?? $this->sNome;
+		$this->oCarro->copyFrom($oMotorista->oCarro);		
+	}
+
+	public function atualizar() {
+		DC::getMotoristaDAO()->replace($this);
 	}
 }

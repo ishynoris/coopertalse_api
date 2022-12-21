@@ -29,14 +29,14 @@ class MotoristaDAO {
 		$aId = $oFiltros->getId();
 		if (!empty($aId)) {
 			$sBindParams = implode(", ", array_fill(0, count($aId), "?"));
-			$sSql .= " AND mta.mta_id IN {$sBindParams}";
+			$sSql .= " AND mta.mta_id IN ({$sBindParams})";
 			$aParams = array_merge($aParams, $aId);
 		}
 
 		$aHashDispositivo = $oFiltros->getHashDispositivo();
 		if (!empty($aHashDispositivo)) {
 			$sBindParams = implode(", ", array_fill(0, count($aHashDispositivo), "?"));
-			$sSql .= " AND mta.mta_device_hash IN {$sBindParams}";
+			$sSql .= " AND mta.mta_device_hash IN ({$sBindParams})";
 			$aParams = array_merge($aParams, $aHashDispositivo);
 		}
 
@@ -55,5 +55,22 @@ class MotoristaDAO {
 
 		$iId = $this->oConnection->insert($sSql, $aParams);
 		$oMotorista->setId($iId);
+	}
+
+	public function replace(Motorista $oMotorista) {
+		$sSql = "UPDATE mta_motorista SET 
+					mta_device_hash = ?
+					, mta_nome = ?
+					, cro_id = ?
+				 WHERE mta_id = ?";
+				 
+		$aParams = [
+			$oMotorista->getDeviceHash(),
+			$oMotorista->getNome(),
+			$oMotorista->getCarroId(),
+			$oMotorista->getId(),
+		];
+
+		$this->oConnection->execute($sSql, $aParams);
 	}
 }
