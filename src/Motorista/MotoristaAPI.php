@@ -29,6 +29,7 @@ class MotoristaAPI {
 		$oNovoMotorista = Motorista::createFromRequest($oRequest);
 		$oMotorista->copyFrom($oNovoMotorista);
 		$oMotorista->atualizar();
+		$oResponse->getBody()->write($oMotorista->__toString());
 		return $oResponse;
 	}
 }
