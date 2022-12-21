@@ -1,5 +1,6 @@
 <?php
 
+use CoopertalseAPI\Dispositivo\DispositivoAPI;
 use CoopertalseAPI\Motorista\MotoristaAPI;
 use Slim\Factory\AppFactory;
 use Slim\Interfaces\RouteCollectorProxyInterface;
@@ -13,6 +14,7 @@ try {
     $oApp = AppFactory::create();
     $oApp->group($sUrlBase, function(RouteCollectorProxyInterface $oApp) {
         $oApp->group("/motorista", MotoristaAPI::class);
+        $oApp->group("/dispositivo", DispositivoAPI::class);
     });
     $oApp->run();
 } catch (Exception $e) {
