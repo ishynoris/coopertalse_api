@@ -7,7 +7,7 @@ use CoopertalseAPI\Framework\DC;
 
 class Carro extends AbstractModel {
 
-	private int $iId;
+	private int $iId = 0;
 	private string $sNumero;
 
 	public function __construct(string $sNumero) {
@@ -39,6 +39,11 @@ class Carro extends AbstractModel {
 
 	public function getNumero(): string {
 		return str_pad($this->sNumero, 3, "0", STR_PAD_LEFT);
+	}
+
+	public function copyFrom(Carro $oCarro) {
+		$this->iId = $oCarro->iId > 0 ? $oCarro->iId : $this->iId;
+		$this->sNumero = $oCarro->sNumero ?? $this->sNumero;
 	}
 
 	public function cadastrar() {
