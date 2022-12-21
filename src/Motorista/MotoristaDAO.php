@@ -13,7 +13,10 @@ class MotoristaDAO {
 	}
 
 	public function findByFilters(MotoristaFilters $oFiltros): MotoristaList {
-		$sSql = "SELECT mta.* FROM mta_motorsta WHERE 1=1";
+		$sSql = "SELECT * 
+				 FROM mta_motorista mta 
+				 JOIN cro_carro cro on mta.cro_id = cro.cro_id
+				 WHERE 1=1";
 		$aParams = [];
 
 		$sHashDispositivo = $oFiltros->getHashDispositivo();
