@@ -3,7 +3,6 @@
 namespace CoopertalseAPI\ChavePix;
 
 use CoopertalseAPI\Framework\AbstractList;
-use CoopertalseAPI\Motorista\Motorista;
 
 class ChavePixList extends AbstractList {
 

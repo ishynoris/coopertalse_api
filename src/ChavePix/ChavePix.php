@@ -2,11 +2,11 @@
 
 namespace CoopertalseAPI\ChavePix;
 
+use CoopertalseAPI\Framework\AbstractModel;
 use CoopertalseAPI\Framework\DC;
 use CoopertalseAPI\Motorista\Motorista;
-use JsonSerializable;
 
-class ChavePix implements JsonSerializable {
+class ChavePix extends AbstractModel {
 
 	private int $iId;
 	private string $sChave;
@@ -17,21 +17,22 @@ class ChavePix implements JsonSerializable {
         $this->oMotorista = $oMotorista;
 	}
 
-	public static function createFromArray(array $aChave) {
-		return new ChavePix($aChave['chx_id'], $aChave['oMotorista']);
+	public static function createFromArray(array $aChave): AbstractModel {
+		$oChave = new ChavePix($aChave['chx_chave_pix'], $aChave['oMotorista']);
+
+		if (!empty($aChave['chx_id'])) {
+			$oChave->iId = $aChave['chx_id'];
+		}
+
+		return $oChave;
 	}
 
-
-	public function __toString(): string {
-		return $this->jsonSerialize();
-	}
-
-	public function jsonSerialize(): mixed {
-		return json_encode([
+	public function toArray(): array {
+		return [
 			'chx_id' => $this->iId,
-            'chx_chave_pix' => $this->sChave,
-            'mta_id' => $this->oMotorista->getId(),
-		]);
+			'chx_chave_pix' => $this->sChave,
+			'mta_id' => $this->oMotorista->getId(),
+		];
 	}
 
 	public function setId(int $iId) {

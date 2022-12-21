@@ -11,9 +11,9 @@ abstract class AbstractList implements Countable, Iterator {
     protected array $aChaves = [];
     protected array $aElements = [];
 
-    protected function attach($oElement, $sChave) {
+    protected function attach(AbstractModel $oElement, $sChave = null) {
         if (empty($sChave)) {
-            $sChave = $this->count();
+            $sChave = $oElement->getId();
         }
         $this->aChaves[] = $sChave;
         $this->aElements[] = $oElement;
