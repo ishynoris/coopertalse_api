@@ -25,7 +25,7 @@ class Motorista extends AbstractModel {
 	}
 
 	public static function createFromArray(array $aMotorista): Motorista {
-		$oCarro = new Carro($aMotorista['cro_id']);
+		$oCarro = Carro::createFromArray($aMotorista);
 		$oMotorista = new Motorista($aMotorista['mta_nome'], $aMotorista['mta_device_hash'], $oCarro);
 
 		if (isset($aMotorista['mta_id'])) {
@@ -53,6 +53,7 @@ class Motorista extends AbstractModel {
 			'mta_device_hash' => $this->sDeviceHash,
 			'mta_nome' => $this->sNome,
 			'cro_id' => $this->getCarroId(),
+			'cro_numero' => $this->oCarro->getNumero(),
 		];
 	}
 

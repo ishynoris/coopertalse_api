@@ -2,27 +2,31 @@
 
 namespace CoopertalseAPI\Carro;
 
+use CoopertalseAPI\Framework\AbstractModel;
 use CoopertalseAPI\Framework\DC;
-use JsonSerializable;
 
-class Carro implements JsonSerializable {
+class Carro extends AbstractModel {
 
 	private int $iId;
-	private string $iNumero;
+	private string $sNumero;
 
-	public function __construct(int $iNumero) {
-		$this->iNumero = $iNumero;
+	public function __construct(string $sNumero) {
+		$this->sNumero = $sNumero;
 	}
 
-	public function __toString(): string {
-		return $this->jsonSerialize();
+	public static function createFromArray(array $aElement): AbstractModel {
+		$oCarro = new Carro($aElement['cro_numero']);
+		if (!empty($aElement['cro_id'])) {
+			$oCarro->iId = $aElement['cro_id'];
+		}
+		return $oCarro;
 	}
 
-	public function jsonSerialize(): mixed {
-		return json_encode([
+	public function toArray(): array {
+		return [
 			'cro_id' => $this->iId,
-            'cro_numero' => $this->iNumero,
-		]);
+            'cro_numero' => $this->sNumero,
+		];
 	}
 
 	public function setId(int $iId) {
@@ -34,7 +38,7 @@ class Carro implements JsonSerializable {
 	}
 
 	public function getNumero(): string {
-		return str_pad($this->iNumero, 3, "0", STR_PAD_LEFT);
+		return str_pad($this->sNumero, 3, "0", STR_PAD_LEFT);
 	}
 
 	public function cadastrar() {
