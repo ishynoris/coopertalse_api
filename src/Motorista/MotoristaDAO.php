@@ -12,6 +12,13 @@ class MotoristaDAO {
 		$this->oConnection = $oConnection;
 	}
 
+	public function find(int $iId): Motorista {
+		$oFiltros = new MotoristaFilters;
+		$oFiltros->setId([ $iId ]);
+		$loMotoristas = $this->findByFilters($oFiltros);
+		return $loMotoristas->first();
+	}
+
 	public function findByFilters(MotoristaFilters $oFiltros): MotoristaList {
 		$sSql = "SELECT * 
 				 FROM mta_motorista mta 
@@ -19,10 +26,18 @@ class MotoristaDAO {
 				 WHERE 1=1";
 		$aParams = [];
 
-		$sHashDispositivo = $oFiltros->getHashDispositivo();
-		if (!empty($sHashDispositivo)) {
-			$sSql .= " AND mta.mta_device_hash = ?";
-			$aParams[] = $sHashDispositivo;
+		$aId = $oFiltros->getId();
+		if (!empty($aId)) {
+			$sBindParams = implode(", ", array_fill(0, count($aId), "?"));
+			$sSql .= " AND mta.mta_id IN {$sBindParams}";
+			$aParams = array_merge($aParams, $aId);
+		}
+
+		$aHashDispositivo = $oFiltros->getHashDispositivo();
+		if (!empty($aHashDispositivo)) {
+			$sBindParams = implode(", ", array_fill(0, count($aHashDispositivo), "?"));
+			$sSql .= " AND mta.mta_device_hash IN {$sBindParams}";
+			$aParams = array_merge($aParams, $aHashDispositivo);
 		}
 
 		$aaMotorista = $this->oConnection->select($sSql, $aParams);

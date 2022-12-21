@@ -4,13 +4,22 @@ namespace CoopertalseAPI\Motorista;
 
 class MotoristaFilters {
 
-    private string $sHashDispositivo;
+    private array $aId = [];
+    private array $aHashDispositivo = [];
 
-    public function getHashDispositivo(): ?string {
-        return $this->sHashDispositivo;
+    public function setId(array $aId) {
+        $this->aId = $aId;
     }
 
-    public function setHashDispositivo(string $sHashDispositivo) {
-        $this->sHashDispositivo = $sHashDispositivo;
+    public function getId(): array {
+        return $this->aId;
+    }
+
+    public function getHashDispositivo(): array {
+        return $this->aHashDispositivo;
+    }
+
+    public function setHashDispositivo(array $aHashDispositivo) {
+        $this->aHashDispositivo = $aHashDispositivo;
     }
 }
