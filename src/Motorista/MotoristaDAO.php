@@ -61,13 +61,11 @@ class MotoristaDAO {
 		$sSql = "UPDATE mta_motorista SET 
 					mta_device_hash = ?
 					, mta_nome = ?
-					, cro_id = ?
 				 WHERE mta_id = ?";
 				 
 		$aParams = [
 			$oMotorista->getDeviceHash(),
 			$oMotorista->getNome(),
-			$oMotorista->getCarroId(),
 			$oMotorista->getId(),
 		];
 

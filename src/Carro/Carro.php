@@ -42,7 +42,6 @@ class Carro extends AbstractModel {
 	}
 
 	public function copyFrom(Carro $oCarro) {
-		$this->iId = $oCarro->iId > 0 ? $oCarro->iId : $this->iId;
 		$this->sNumero = $oCarro->sNumero ?? $this->sNumero;
 	}
 

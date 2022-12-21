@@ -96,7 +96,6 @@ class Motorista extends AbstractModel {
 	}
 
 	public function copyFrom(Motorista $oMotorista) {
-		$this->iId = $oMotorista->iId > 0 ? $oMotorista->iId : $this->iId;
 		$this->sDeviceHash = $oMotorista->sDeviceHash ?? $this->sDeviceHash;
 		$this->sNome = $oMotorista->sNome ?? $this->sNome;
 		$this->oCarro->copyFrom($oMotorista->oCarro);		
