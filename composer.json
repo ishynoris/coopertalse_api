@@ -1,0 +1,25 @@
+{
+    "name": "sharktech/coopertalse_api",
+    "autoload": {
+        "psr-4": {
+            "CoopertalseAPI\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Anailson Mota",
+            "email": "mota.a.santos@gmail.com"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/ishynoris/mini-framework.git"
+        }   
+    ],
+    "require": {
+        "ishynoris/mini_framework": "dev-master",
+        "slim/slim": "4.*",
+        "slim/psr7": "^1.6"
+    }
+}

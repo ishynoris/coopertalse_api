@@ -1,0 +1,6 @@
+RewriteEngine On
+
+RewriteRule %{REQUEST_FILENAME} !-f
+RewriteRule %{REQUEST_FILENAME} !-d
+
+RewriteRule ^ index.php
