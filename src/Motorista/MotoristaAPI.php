@@ -5,14 +5,14 @@ namespace CoopertalseAPI\Motorista;
 use CoopertalseAPI\Framework\DC;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\Interfaces\RouteCollectorProxyInterface;
+use Slim\App;
 
 class MotoristaAPI {
 
-	public function __invoke(RouteCollectorProxyInterface $oGroup) {
+	public function __invoke(App $oGroup) {
 		$oGroup->post("/", [ self::class, "salvar" ]);
 	
-		$oGroup->group("/{_id}", function(RouteCollectorProxyInterface $oGroup) {
+		$oGroup->group("/{_id}", function(App $oGroup) {
 			$oGroup->post("/atualizar", [ self::class, "atualizar" ]);
 		});
 	}
