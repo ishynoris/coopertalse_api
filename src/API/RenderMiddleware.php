@@ -6,25 +6,34 @@ use Fig\Http\Message\StatusCodeInterface;
 use Slim\Psr7\Response;
 use Psr\Http\Message\ResponseInterface as Resp;
 use Psr\Http\Message\ServerRequestInterface as Req;
-use Slim\Route;
+use Throwable;
+use Traversable;
 
 class RenderMiddleware  {
 
-	public function __invoke(Req $oRequest, Resp $oResponse, Route $oMiddleware) {
-		$oResponse = $oMiddleware($oRequest, $oResponse);
+	public function __invoke(Req $oRequest, Resp $oResponse, callable $oMiddleware) {
+		$bSucesso = true;
+		$sMensagem = "Sucesso";
+		$aResposta = null;
+
+		try {
+			$oResponse = $oMiddleware($oRequest, $oResponse);
+		} catch (Throwable $e) {
+			$oResponse = DC::processErroHandler($e, $oRequest, $oResponse);
+			$bSucesso = false;
+		}
 
 		$oStream = $oResponse->getBody();
 		$oStream->rewind();
-		$aResposta = $oStream->getContents();
-		if (empty($aResposta)) {
-			$aResposta = [];
-		}
-	
-		$bSucesso = true;
-		$sMensagem = "Sucesso";
-		if ($oResponse->getStatusCode() != StatusCodeInterface::STATUS_OK) {
-			$bSucesso = false;
-			$sMensagem = "XPTO";
+		$mResposta = $oStream->getContents();
+
+		if ($bSucesso) {
+			$aResposta = $mResposta;
+		} else if (is_string($mResposta)) {
+			$sMensagem = $mResposta;
+		} else {
+			$sMensagem = "Ocorreu um erro ao processar a requisição";
+			$aResposta = $mResposta;
 		}
 	
 		$sBody = json_encode([
