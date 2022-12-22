@@ -64,4 +64,16 @@ class MysqlConnection implements ConnectionInterface {
 			CoopertalseException::throwFromException("Não foi possível executar o script", $e);
 		}
 	}
+
+	public function startTransaction(): bool {
+		return $this->oPDO->beginTransaction();
+	}
+
+	public function commitTransaction(): bool {
+		return $this->oPDO->commit();
+	}
+
+	public function rollbackTransaction(): bool {
+		return $this->oPDO->rollBack();
+	}
 }

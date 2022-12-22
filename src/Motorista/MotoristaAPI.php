@@ -6,6 +6,7 @@ use CoopertalseAPI\Framework\DC;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
+use Throwable;
 
 class MotoristaAPI {
 
@@ -19,7 +20,15 @@ class MotoristaAPI {
 
 	public static function salvar(Request $oRequest, Response $oResponse): Response {
 		$oMotorista = Motorista::createFromRequest($oRequest);
-		$oMotorista->cadastrar();
+		DC::getConnection()->startTransaction();
+		try {
+			$oMotorista->cadastrar();
+		} catch (Throwable $e) {
+			DC::getConnection()->rollbackTransaction();
+			throw $e;
+		} finally {
+			DC::getConnection()->commitTransaction();
+		}
 		return $oResponse;
 	}
 

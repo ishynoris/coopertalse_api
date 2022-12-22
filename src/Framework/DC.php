@@ -40,6 +40,10 @@ class DC {
 		return self::$oChavePixDAO;
 	}
 
+	public static function getConnection(): ConnectionInterface {
+		return self::initConnection();
+	}
+
 	private static function initConnection(): ConnectionInterface {
 		if (empty(self::$oConnection)) {
 			$sDbName = self::getVar("DB_NAME");
