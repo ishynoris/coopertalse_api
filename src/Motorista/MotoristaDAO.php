@@ -3,6 +3,7 @@
 namespace CoopertalseAPI\Motorista;
 
 use CoopertalseAPI\DB\ConnectionInterface;
+use DateTime;
 
 class MotoristaDAO {
 
@@ -22,9 +23,12 @@ class MotoristaDAO {
 	public function findByFilters(MotoristaFilters $oFiltros): MotoristaList {
 		$sSql = "SELECT * 
 				 FROM mta_motorista mta 
-				 JOIN cro_carro cro on mta.cro_id = cro.cro_id
-				 WHERE 1=1";
-		$aParams = [];
+				 JOIN cro_carro cro 
+				 ON mta.cro_id = cro.cro_id
+				 WHERE mta.mta_deletado = ?";
+		$aParams = [
+			false
+		];
 
 		$aId = $oFiltros->getId();
 		if (!empty($aId)) {
@@ -45,12 +49,14 @@ class MotoristaDAO {
 	}
 
 	public function save(Motorista $oMotorista) {
-		$sSql = "INSERT INTO mta_motorista (mta_device_hash, mta_nome, cro_id) 
-				 VALUES (?, ?, ?)";
+		$sSql = "INSERT INTO mta_motorista (mta_device_hash, mta_nome, cro_id, mta_data_cadastro, mta_deletado) 
+				 VALUES (?, ?, ?, ?, ?)";
 		$aParams = [
 			$oMotorista->getDeviceHash(),
 			$oMotorista->getNome(),
 			$oMotorista->getCarroId(),
+			(new DateTime)->format("Y-m-d H:i:s"),
+			false,
 		];
 
 		$iId = $this->oConnection->insert($sSql, $aParams);
@@ -61,11 +67,13 @@ class MotoristaDAO {
 		$sSql = "UPDATE mta_motorista SET 
 					mta_device_hash = ?
 					, mta_nome = ?
+					, mta_data_alteracao = ?
 				 WHERE mta_id = ?";
 				 
 		$aParams = [
 			$oMotorista->getDeviceHash(),
 			$oMotorista->getNome(),
+			(new DateTime())->format("Y-m-d H:i:s"),
 			$oMotorista->getId(),
 		];
 

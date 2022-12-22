@@ -3,6 +3,7 @@
 namespace CoopertalseAPI\ChavePix;
 
 use CoopertalseAPI\DB\ConnectionInterface;
+use DateTime;
 
 class ChavePixDAO {
 	
@@ -13,10 +14,12 @@ class ChavePixDAO {
 	}
 
 	public function save(ChavePix $oChavePix) {
-		$sSql = "INSERT INTO chx_chave_pix (mta_id, chx_chave_pix) VALUES (?, ?);";
+		$sSql = "INSERT INTO chx_chave_pix (mta_id, chx_chave_pix, chx_data_cadastro, chx_deletado) VALUES (?, ?, ?, ?);";
 		$aParams = [
 			$oChavePix->getMotoristaId(),
 			$oChavePix->getChave(),
+			(new DateTime)->format("Y-m-d H:i:s"),
+			false,
 		];
 
 		$iId = $this->oConnection->insert($sSql, $aParams);
