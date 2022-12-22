@@ -5,6 +5,7 @@ use PDO;
 use PDOException;
 
 use CoopertalseAPI\DB\ConnectionInterface;
+use CoopertalseAPI\Framework\CoopertalseException;
 
 class MysqlConnection implements ConnectionInterface {
 
@@ -20,32 +21,47 @@ class MysqlConnection implements ConnectionInterface {
 			$this->oPDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 		} catch (PDOException $e) {
-			echo "Falha: " . $e->getMessage() . "\n";
-			die();
+			CoopertalseException::throwFromException("Não foi possível realizar conexão com Banco de Dados", $e);
 		}
 	}
 
 	public function insert(string $sSql, array $aParams = []): int {
-		$stmt = $this->oPDO->prepare($sSql);
-		$stmt->execute($aParams);
+		try {
+			$stmt = $this->oPDO->prepare($sSql);
+			$stmt->execute($aParams);
+		} catch (PDOException $e) {
+			CoopertalseException::throwFromException("Não foi possível realizar a inserão no banco", $e);
+		}
 		return $this->oPDO->lastInsertId();
 	}
 
 	public function select(string $sSql, array $aParams = []): array {
-		$oStatement = $this->oPDO->prepare($sSql);
-		$oStatement->execute($aParams);
-		return $oStatement->fetchAll();
+		try {
+			$oStatement = $this->oPDO->prepare($sSql);
+			$oStatement->execute($aParams);
+			return $oStatement->fetchAll();
+		} catch (PDOException $e) {
+			CoopertalseException::throwFromException("Não foi possível realizar a consulta", $e);
+		}
 	}
 
 	public function selectOne(string $sSql, array $aParams = []): array {
-		$oStatement = $this->oPDO->prepare($sSql);
-		$oStatement->execute($aParams);
-		return $oStatement->fetch();
+		try {
+			$oStatement = $this->oPDO->prepare($sSql);
+			$oStatement->execute($aParams);
+			return $oStatement->fetch();
+		} catch (PDOException $e) {
+			CoopertalseException::throwFromException("Não foi possível realizar a consulta unitária", $e);
+		}
 	}
 
 	public function execute(string $sSql, array $aParams = []): int {
-		$oStatement = $this->oPDO->prepare($sSql);
-		$oStatement->execute($aParams);
-		return $oStatement->rowCount();
+		try {
+			$oStatement = $this->oPDO->prepare($sSql);
+			$oStatement->execute($aParams);
+			return $oStatement->rowCount();
+		} catch (PDOException $e) {
+			CoopertalseException::throwFromException("Não foi possível executar o script", $e);
+		}
 	}
 }

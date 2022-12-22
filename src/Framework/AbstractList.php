@@ -51,23 +51,23 @@ abstract class AbstractList implements Countable, Iterator {
 
 	public function getByChave(string $sChave): AbstractModel {
 		if ($this->isEmpty()) {
-			throw new Exception("Essa lista não possui elementos");
+			throw new CoopertalseException("Essa lista não possui elementos");
 		}
 
 		if (empty($sChave)) {
-			throw new Exception("A chave do elemento não foi informada.");
+			throw new CoopertalseException("A chave do elemento não foi informada.");
 		}
 
 		$oElement = $this->aElements[$sChave];
 		if (empty($oElement)) {
-			throw new Exception("Nenhum elemento encontrado com a chave \"{$sChave}\"");
+			throw new CoopertalseException("Nenhum elemento encontrado com a chave \"{$sChave}\"");
 		}
 		return $oElement;
 	}
 
 	public function getByIndice(int $iIndice): AbstractModel {
 		if ($iIndice < 0 || $iIndice >= count($this->aChaves)) {
-			throw new Exception("Índice \"{$iIndice}\" inválido");
+			throw new CoopertalseException("Índice \"{$iIndice}\" inválido");
 		}
 
 		$sChave = $this->aChaves[$iIndice] ?? "";
