@@ -22,7 +22,8 @@ class RenderMiddleware  {
 			$oResponse = DC::processErroHandler($e, $oRequest, $oResponse);
 			$bSucesso = false;
 		}
-
+		
+		ob_end_clean();
 		$oStream = $oResponse->getBody();
 		$oStream->rewind();
 		$mResposta = $oStream->getContents();
