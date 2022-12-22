@@ -1,22 +1,27 @@
 <?php
 
+use CoopertalseAPI\API\RenderMiddleware;
 use CoopertalseAPI\Dispositivo\DispositivoAPI;
 use CoopertalseAPI\Motorista\MotoristaAPI;
-use Slim\Factory\AppFactory;
+use Fig\Http\Message\StatusCodeInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface;
+use Slim\Psr7\Request;
+use Slim\Psr7\Response;
 
 require_once __DIR__ . "/vendor/autoload.php";
 
-$sUrlBase = "/coopertalse_api";
+$oApp = new App();
 
-try {
-    /** @var Slim\App $oApp */
-    $oApp = AppFactory::create();
-    $oApp->group($sUrlBase, function(RouteCollectorProxyInterface $oApp) {
-        $oApp->group("/motorista", MotoristaAPI::class);
-        $oApp->group("/dispositivo", DispositivoAPI::class);
-    });
-    $oApp->run();
-} catch (Exception $e) {
-    var_dump($e);
-}
+$oApp->group("/v1", function() {
+	$this->get("/test2", function($req, $resp) {
+		$resp->withBody(json_encode( [ "dfsdfsdf" ]));
+		return $resp;
+	});
+	$this->group("/motorista", MotoristaAPI::class);
+	$this->group("/dispositivo", DispositivoAPI::class);
+})->add(RenderMiddleware::class);
+
+$oApp->run();
+
