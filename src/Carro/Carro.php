@@ -3,6 +3,7 @@
 namespace CoopertalseAPI\Carro;
 
 use CoopertalseAPI\Framework\AbstractModel;
+use CoopertalseAPI\Framework\CoopertalseException;
 use CoopertalseAPI\Framework\DC;
 
 class Carro extends AbstractModel {
@@ -46,6 +47,10 @@ class Carro extends AbstractModel {
 	}
 
 	public function cadastrar() {
+		if (empty($this->sNumero)) {
+			throw new CoopertalseException("O número do carro não foi informado");
+		}
+
 		DC::getCarroDAO()->save($this);
 	}
 }

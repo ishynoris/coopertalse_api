@@ -6,6 +6,7 @@ use CoopertalseAPI\Carro\Carro;
 use CoopertalseAPI\ChavePix\ChavePix;
 use CoopertalseAPI\ChavePix\ChavePixList;
 use CoopertalseAPI\Framework\AbstractModel;
+use CoopertalseAPI\Framework\CoopertalseException;
 use CoopertalseAPI\Framework\DC;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -33,17 +34,18 @@ class Motorista extends AbstractModel {
 		}
 
 		$aaChaves = $aMotorista['chx_chave_pix'] ?? [];
-		foreach ($aaChaves as $aChave) {
-			$aChave['oMotorista'] = $oMotorista;
-			$oChave = ChavePix::createFromArray($aChave);
-			$oMotorista->addChavePix($oChave);
+		if (is_string($aaChaves)) {
+			$aaChaves = json_decode($aaChaves);
+		}
+		foreach ($aaChaves as $sChave) {
+			$oMotorista->addChavePix(new ChavePix($sChave, $oMotorista));
 		}
 
 		return $oMotorista;
 	}
 
 	public static function createFromRequest(Request $oRequest): Motorista {
-		$aMotorista = json_decode($oRequest->getBody()->getContents(), true);
+		$aMotorista = $oRequest->getParsedBody();
 		return self::createFromArray($aMotorista);
 	}
 
@@ -86,6 +88,10 @@ class Motorista extends AbstractModel {
 	}
 
 	public function cadastrar() {
+		if (empty($this->sNome)) {
+			throw new CoopertalseException("O nome do motorista não foi informado");
+		}
+
 		$this->oCarro->cadastrar();
 		DC::getMotoristaDAO()->save($this);
 
