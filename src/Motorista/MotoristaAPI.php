@@ -28,6 +28,7 @@ class MotoristaAPI {
 			throw $e;
 		} finally {
 			DC::getConnection()->commitTransaction();
+			$oResponse->getBody()->write($oMotorista->__toString());
 		}
 		return $oResponse;
 	}
