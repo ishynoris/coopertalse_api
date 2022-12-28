@@ -46,7 +46,7 @@ final class DC {
 	}
 
 	private static function getNotFoundHandler(): callable {
-		$fnHandler = function(Req $oReq, Resp $oResponse, $e) {
+		$fnHandler = function(Req $oReq, Resp $oResponse) {
 			return $oResponse->withStatus(404);
 		};
 
