@@ -34,9 +34,6 @@ class Motorista extends AbstractModel {
 		}
 
 		$aaChaves = $aMotorista['chx_chave_pix'] ?? [];
-		if (is_string($aaChaves)) {
-			$aaChaves = json_decode($aaChaves);
-		}
 		foreach ($aaChaves as $sChave) {
 			$oMotorista->addChavePix(new ChavePix($sChave, $oMotorista));
 		}
